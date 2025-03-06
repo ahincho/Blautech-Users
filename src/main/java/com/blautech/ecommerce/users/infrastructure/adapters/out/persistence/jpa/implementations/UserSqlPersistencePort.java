@@ -13,8 +13,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-
 @Repository
 public class UserSqlPersistencePort implements UserPersistencePort {
     private final UserJpaRepository userJpaRepository;

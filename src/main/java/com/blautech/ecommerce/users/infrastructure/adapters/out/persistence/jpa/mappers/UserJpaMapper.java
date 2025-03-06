@@ -56,7 +56,7 @@ public class UserJpaMapper {
             .totalPages(userEntityPage.getTotalElements())
             .currentPage(userEntityPage.getNumber())
             .pageSize(userEntityPage.getSize())
-            .hasNextPage(!userEntityPage.hasNext())
+            .hasNextPage(userEntityPage.hasNext())
             .items(entityListToDomainList(userEntityPage.getContent()))
             .build();
     }
