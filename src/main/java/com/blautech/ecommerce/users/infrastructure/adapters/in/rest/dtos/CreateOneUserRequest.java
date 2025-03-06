@@ -1,0 +1,31 @@
+package com.blautech.ecommerce.users.infrastructure.adapters.in.rest.dtos;
+
+import jakarta.validation.constraints.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import java.time.LocalDate;
+
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+public class CreateOneUserRequest {
+    @NotBlank(message = "Firstname is required")
+    @Size(min = 1, max = 64, message = "Firstname must be at most 64 characters")
+    private String firstname;
+    @NotBlank(message = "Lastname is required")
+    @Size(min = 1, max = 64, message = "Lastname must be at most 64 characters")
+    private String lastname;
+    @NotBlank(message = "Email is required")
+    @Email(message = "Invalid email format")
+    private String email;
+    @NotBlank(message = "Address is required")
+    @Size(min = 1, max = 256)
+    private String address;
+    @NotNull(message = "Birthday is required")
+    @Past(message = "Birthday must be at the past")
+    private LocalDate birthday;
+}
