@@ -12,6 +12,7 @@ import java.time.LocalDate;
 
 @Service
 public class CreateOneUserDefaultService implements CreateOneUserUseCase {
+    private static final Integer REQUIRED_AGE = 18;
     private final UserPersistencePort userPersistencePort;
     public CreateOneUserDefaultService(UserPersistencePort userPersistencePort) {
         this.userPersistencePort = userPersistencePort;
@@ -23,9 +24,9 @@ public class CreateOneUserDefaultService implements CreateOneUserUseCase {
         return this.userPersistencePort.createOneUser(user);
     }
     private void validateUserAge(LocalDate birthday) throws UserUnderAgeException {
-        LocalDate legalAgeDate = birthday.plusYears(18);
+        LocalDate legalAgeDate = birthday.plusYears(REQUIRED_AGE);
         if (legalAgeDate.isAfter(LocalDate.now())) {
-            throw new UserUnderAgeException("User must be at least 18 years old.");
+            throw new UserUnderAgeException(String.format("User must be at least %d years old.", REQUIRED_AGE));
         }
     }
     private void validateEmailUniqueness(String email) throws UserDuplicateException {
