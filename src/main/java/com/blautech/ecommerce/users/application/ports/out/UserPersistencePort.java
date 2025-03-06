@@ -10,5 +10,7 @@ public interface UserPersistencePort {
     User createOneUser(User user);
     PaginationResult<User> findUsers(UserFilters userFilters);
     Optional<User> findOneUserById(Long id);
+    boolean existsOneUserById(Long id);
     boolean existsOneUserByEmail(String email);
+    void deleteOneUserById(Long id);
 }
