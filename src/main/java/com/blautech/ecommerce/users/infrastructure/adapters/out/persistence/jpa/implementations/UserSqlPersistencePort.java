@@ -39,7 +39,18 @@ public class UserSqlPersistencePort implements UserPersistencePort {
         return this.userJpaRepository.findById(id).map(UserJpaMapper::entityToDomain);
     }
     @Override
+    public boolean existsOneUserById(Long id) {
+        return this.userJpaRepository.existsById(id);
+    }
+
+    @Override
     public boolean existsOneUserByEmail(String email) {
         return this.userJpaRepository.existsByEmail(email);
+    }
+
+    @Override
+    @Transactional
+    public void deleteOneUserById(Long id) {
+        this.userJpaRepository.deleteById(id);
     }
 }
