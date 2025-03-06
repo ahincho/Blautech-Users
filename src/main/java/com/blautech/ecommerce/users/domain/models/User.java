@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Data
@@ -17,7 +18,7 @@ public class User {
     private String lastname;
     private String email;
     private String address;
-    private LocalDateTime birthday;
+    private LocalDate birthday;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 }
