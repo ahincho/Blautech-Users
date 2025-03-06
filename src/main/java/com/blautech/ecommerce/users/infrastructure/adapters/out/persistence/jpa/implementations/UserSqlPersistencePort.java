@@ -13,6 +13,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 @Repository
 public class UserSqlPersistencePort implements UserPersistencePort {
     private final UserJpaRepository userJpaRepository;
@@ -31,6 +33,10 @@ public class UserSqlPersistencePort implements UserPersistencePort {
         Pageable pageable = UserJpaMapper.domainPageToEntityPage(userFilters);
         Page<UserEntity> userEntityPage = userJpaRepository.findAll(pageable);
         return UserJpaMapper.entityPageToDomainPage(userEntityPage);
+    }
+    @Override
+    public Optional<User> findOneUserById(Long id) {
+        return this.userJpaRepository.findById(id).map(UserJpaMapper::entityToDomain);
     }
     @Override
     public boolean existsOneUserByEmail(String email) {
