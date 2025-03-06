@@ -1,6 +1,7 @@
 package com.blautech.ecommerce.users.infrastructure.adapters.in.rest.advices;
 
 import com.blautech.ecommerce.users.domain.exceptions.UserDuplicateException;
+import com.blautech.ecommerce.users.domain.exceptions.UserNotFoundException;
 import com.blautech.ecommerce.users.domain.exceptions.UserUnderAgeException;
 import com.blautech.ecommerce.users.infrastructure.adapters.in.rest.dtos.ExceptionResponse;
 import jakarta.servlet.http.HttpServletRequest;
@@ -38,5 +39,19 @@ public class UserRestAdvice {
             .message(userDuplicateException.getMessage())
             .build();
         return ResponseEntity.status(HttpStatus.CONFLICT).body(exceptionResponse);
+    }
+    @ExceptionHandler(UserNotFoundException.class)
+    public ResponseEntity<ExceptionResponse> userNotFoundException(
+        UserNotFoundException userNotFoundException,
+        HttpServletRequest httpServletRequest
+    ) {
+        ExceptionResponse exceptionResponse = ExceptionResponse.builder()
+            .path(httpServletRequest.getRequestURI())
+            .method(httpServletRequest.getMethod())
+            .statusCode(HttpStatus.NOT_FOUND.value())
+            .statusDescription(HttpStatus.NOT_FOUND.name())
+            .message(userNotFoundException.getMessage())
+            .build();
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(exceptionResponse);
     }
 }
