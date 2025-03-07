@@ -23,13 +23,13 @@ public class CreateOneUserDefaultService implements CreateOneUserUseCase {
         validateEmailUniqueness(user.getEmail());
         return this.userPersistencePort.createOneUser(user);
     }
-    private void validateUserAge(LocalDate birthday) throws UserUnderAgeException {
+    protected void validateUserAge(LocalDate birthday) throws UserUnderAgeException {
         LocalDate legalAgeDate = birthday.plusYears(REQUIRED_AGE);
         if (legalAgeDate.isAfter(LocalDate.now())) {
             throw new UserUnderAgeException(String.format("User must be at least %d years old.", REQUIRED_AGE));
         }
     }
-    private void validateEmailUniqueness(String email) throws UserDuplicateException {
+    protected void validateEmailUniqueness(String email) throws UserDuplicateException {
         if (this.userPersistencePort.existsOneUserByEmail(email)) {
             throw new UserDuplicateException(String.format("User with email '%s' already exists", email));
         }

@@ -1,11 +1,14 @@
 package com.blautech.ecommerce.users.infrastructure.adapters.out.persistence.jpa.implementations;
 
 import com.blautech.ecommerce.users.application.ports.out.UserPersistencePort;
+import com.blautech.ecommerce.users.domain.exceptions.RoleNotFoundException;
 import com.blautech.ecommerce.users.domain.models.PaginationResult;
 import com.blautech.ecommerce.users.domain.models.User;
 import com.blautech.ecommerce.users.domain.models.UserFilters;
+import com.blautech.ecommerce.users.infrastructure.adapters.out.persistence.jpa.entities.RoleEntity;
 import com.blautech.ecommerce.users.infrastructure.adapters.out.persistence.jpa.entities.UserEntity;
 import com.blautech.ecommerce.users.infrastructure.adapters.out.persistence.jpa.mappers.UserJpaMapper;
+import com.blautech.ecommerce.users.infrastructure.adapters.out.persistence.jpa.repositories.RoleJpaRepository;
 import com.blautech.ecommerce.users.infrastructure.adapters.out.persistence.jpa.repositories.UserJpaRepository;
 
 import org.springframework.data.domain.Page;
@@ -15,17 +18,29 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Repository
 public class UserSqlPersistenceAdapter implements UserPersistencePort {
+    private static final String DEFAULT_ROLE = "Customer";
     private final UserJpaRepository userJpaRepository;
-    public UserSqlPersistenceAdapter(UserJpaRepository userJpaRepository) {
+    private final RoleJpaRepository roleJpaRepository;
+    public UserSqlPersistenceAdapter(
+        UserJpaRepository userJpaRepository,
+        RoleJpaRepository roleJpaRepository
+    ) {
         this.userJpaRepository = userJpaRepository;
+        this.roleJpaRepository = roleJpaRepository;
     }
     @Override
     @Transactional
     public User createOneUser(User user) {
         UserEntity userEntity = UserJpaMapper.domainToEntity(user);
+        Optional<RoleEntity> roleEntity = this.roleJpaRepository.findByName(DEFAULT_ROLE);
+        if (roleEntity.isEmpty()) {
+            throw new RoleNotFoundException(String.format("Default role %s not found", DEFAULT_ROLE));
+        }
+        userEntity.setRoles(Set.of(roleEntity.get()));
         UserEntity savedUserEntity = this.userJpaRepository.save(userEntity);
         return UserJpaMapper.entityToDomain(savedUserEntity);
     }

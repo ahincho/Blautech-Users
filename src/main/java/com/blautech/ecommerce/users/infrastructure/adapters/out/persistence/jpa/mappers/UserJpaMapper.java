@@ -49,7 +49,7 @@ public class UserJpaMapper {
             .updatedAt(userEntity.getUpdatedAt())
             .build();
     }
-    protected static Role entityRoleToDomainRole(RoleEntity roleEntity) {
+    public static Role entityRoleToDomainRole(RoleEntity roleEntity) {
         return Role.builder()
             .id(roleEntity.getId())
             .name(roleEntity.getName())
