@@ -1,5 +1,6 @@
 package com.blautech.ecommerce.users.infrastructure.adapters.in.rest.dtos;
 
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.PositiveOrZero;
@@ -19,5 +20,6 @@ public class UserQueryRequest {
     private Integer page = 0;
     @NotNull(message = "Size is required")
     @Positive(message = "Size must be positive")
+    @Min(value = 10, message = "Size must be greater than 10")
     private Integer size = 10;
 }

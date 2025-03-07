@@ -1,7 +1,8 @@
 package com.blautech.ecommerce.users.infrastructure.adapters.in.rest.mappers;
 
-import com.blautech.ecommerce.users.domain.models.Page;
 import com.blautech.ecommerce.users.domain.models.PaginationResult;
+import com.blautech.ecommerce.users.domain.models.Role;
+import com.blautech.ecommerce.users.domain.models.Page;
 import com.blautech.ecommerce.users.domain.models.User;
 import com.blautech.ecommerce.users.domain.models.UserFilters;
 import com.blautech.ecommerce.users.infrastructure.adapters.in.rest.dtos.CreateOneUserRequest;
@@ -11,6 +12,7 @@ import com.blautech.ecommerce.users.infrastructure.adapters.in.rest.dtos.UserRes
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class UserRestMapper {
     private UserRestMapper() {}
@@ -34,6 +36,11 @@ public class UserRestMapper {
             .email(user.getEmail())
             .address(user.getAddress())
             .birthday(user.getBirthday())
+            .roles(
+                user.getRoles().stream()
+                    .map(Role::getName)
+                    .collect(Collectors.toSet())
+            )
             .createdAt(user.getCreatedAt())
             .updatedAt(user.getUpdatedAt())
             .build();

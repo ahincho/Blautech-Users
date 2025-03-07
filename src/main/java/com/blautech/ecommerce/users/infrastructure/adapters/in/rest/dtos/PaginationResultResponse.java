@@ -13,7 +13,7 @@ import java.util.List;
 @AllArgsConstructor
 public class PaginationResultResponse<T> {
     private Long totalItems;
-    private Long totalPages;
+    private Integer totalPages;
     private Integer currentPage;
     private Integer pageSize;
     private Boolean hastNextPage;

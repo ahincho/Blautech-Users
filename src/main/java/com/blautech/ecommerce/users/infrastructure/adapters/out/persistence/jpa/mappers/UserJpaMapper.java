@@ -1,8 +1,10 @@
 package com.blautech.ecommerce.users.infrastructure.adapters.out.persistence.jpa.mappers;
 
 import com.blautech.ecommerce.users.domain.models.PaginationResult;
+import com.blautech.ecommerce.users.domain.models.Role;
 import com.blautech.ecommerce.users.domain.models.User;
 import com.blautech.ecommerce.users.domain.models.UserFilters;
+import com.blautech.ecommerce.users.infrastructure.adapters.out.persistence.jpa.entities.RoleEntity;
 import com.blautech.ecommerce.users.infrastructure.adapters.out.persistence.jpa.entities.UserEntity;
 
 import org.springframework.data.domain.Page;
@@ -10,7 +12,9 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class UserJpaMapper {
     private UserJpaMapper() {}
@@ -34,8 +38,21 @@ public class UserJpaMapper {
             .email(userEntity.getEmail())
             .address(userEntity.getAddress())
             .birthday(userEntity.getBirthday())
+            .roles(
+                userEntity.getRoles() == null || userEntity.getRoles().isEmpty()
+                    ? Collections.emptySet()
+                    : userEntity.getRoles().stream()
+                        .map(UserJpaMapper::entityRoleToDomainRole)
+                        .collect(Collectors.toSet())
+            )
             .createdAt(userEntity.getCreatedAt())
             .updatedAt(userEntity.getUpdatedAt())
+            .build();
+    }
+    protected static Role entityRoleToDomainRole(RoleEntity roleEntity) {
+        return Role.builder()
+            .id(roleEntity.getId())
+            .name(roleEntity.getName())
             .build();
     }
     public static Pageable domainPageToEntityPage(UserFilters userFilters) {
@@ -50,14 +67,14 @@ public class UserJpaMapper {
             .map(UserJpaMapper::entityToDomain)
             .toList();
     }
-    public static PaginationResult<User> entityPageToDomainPage(Page<UserEntity> userEntityPage) {
+    public static PaginationResult<User> entityPageToDomainPage(Page<UserEntity> userEntityPage, List<UserEntity> userEntities) {
         return PaginationResult.<User>builder()
             .totalItems(userEntityPage.getTotalElements())
-            .totalPages(userEntityPage.getTotalElements())
+            .totalPages(userEntityPage.getTotalPages())
             .currentPage(userEntityPage.getNumber())
             .pageSize(userEntityPage.getSize())
             .hasNextPage(userEntityPage.hasNext())
-            .items(entityListToDomainList(userEntityPage.getContent()))
+            .items(entityListToDomainList(userEntities))
             .build();
     }
 }

@@ -12,5 +12,6 @@ public interface UserPersistencePort {
     Optional<User> findOneUserById(Long id);
     boolean existsOneUserById(Long id);
     boolean existsOneUserByEmail(String email);
+    void updateOneUserById(Long id, User user);
     void deleteOneUserById(Long id);
 }
