@@ -27,6 +27,9 @@ public class CreateOneUserRequest {
     @NotBlank(message = "Email is required")
     @Email(message = "Invalid email format")
     private String email;
+    @NotBlank(message = "Lastname is required")
+    @Size(min = 8, max = 64, message = "Lastname must be between 8 and 64 characters")
+    private String password;
     @NotBlank(message = "Address is required")
     @Size(min = 1, max = 256)
     private String address;

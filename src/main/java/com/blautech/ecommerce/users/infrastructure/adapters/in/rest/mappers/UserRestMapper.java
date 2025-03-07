@@ -22,6 +22,7 @@ public class UserRestMapper {
             .firstname(createOneUserRequest.getFirstname())
             .lastname(createOneUserRequest.getLastname())
             .email(createOneUserRequest.getEmail())
+            .password(createOneUserRequest.getPassword())
             .address(createOneUserRequest.getAddress())
             .birthday(createOneUserRequest.getBirthday())
             .createdAt(LocalDateTime.now())
