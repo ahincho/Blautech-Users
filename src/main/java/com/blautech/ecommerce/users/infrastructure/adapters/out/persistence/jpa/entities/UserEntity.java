@@ -39,6 +39,7 @@ public class UserEntity {
     private String firstname;
     private String lastname;
     private String email;
+    private String password;
     private String address;
     private LocalDate birthday;
     @ManyToMany(fetch = FetchType.LAZY)

@@ -13,6 +13,7 @@ import com.blautech.ecommerce.users.infrastructure.adapters.out.persistence.jpa.
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,17 +26,21 @@ public class UserSqlPersistenceAdapter implements UserPersistencePort {
     private static final String DEFAULT_ROLE = "Customer";
     private final UserJpaRepository userJpaRepository;
     private final RoleJpaRepository roleJpaRepository;
+    private final PasswordEncoder passwordEncoder;
     public UserSqlPersistenceAdapter(
         UserJpaRepository userJpaRepository,
-        RoleJpaRepository roleJpaRepository
+        RoleJpaRepository roleJpaRepository,
+        PasswordEncoder passwordEncoder
     ) {
         this.userJpaRepository = userJpaRepository;
         this.roleJpaRepository = roleJpaRepository;
+        this.passwordEncoder = passwordEncoder;
     }
     @Override
     @Transactional
     public User createOneUser(User user) {
         UserEntity userEntity = UserJpaMapper.domainToEntity(user);
+        userEntity.setPassword(this.passwordEncoder.encode(userEntity.getPassword()));
         Optional<RoleEntity> roleEntity = this.roleJpaRepository.findByName(DEFAULT_ROLE);
         if (roleEntity.isEmpty()) {
             throw new RoleNotFoundException(String.format("Default role %s not found", DEFAULT_ROLE));

@@ -24,6 +24,7 @@ public class UserJpaMapper {
             .firstname(user.getFirstname())
             .lastname(user.getLastname())
             .email(user.getEmail())
+            .password(user.getPassword())
             .address(user.getAddress())
             .birthday(user.getBirthday())
             .createdAt(user.getCreatedAt() == null ? null : user.getCreatedAt())
